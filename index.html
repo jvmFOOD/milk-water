@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milk and Water Bill Management</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Custom styles */
+        header {
+            background-color: #dc3545;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Milk and Water Bill Management</h1>
+    </header>
+    <main class="container">
+        <section>
+            <h2>Add New Entry</h2>
+            <form id="billForm">
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" class="form-control" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="water">Water (Liters):</label>
+                    <input type="number" class="form-control" id="water">
+                </div>
+                <div class="form-group">
+                    <label for="milk">Milk (Liters):</label>
+                    <input type="text" class="form-control" id="milk">
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </section>
+        <section>
+            <h2>Bill Entries</h2>
+            <div id="billTable" class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Water (Liters)</th>
+                            <th>Milk (Liters)</th>
+                            <th>Status</th>
+                            <th>Action</th> <!-- New column for action buttons -->
+                        </tr>
+                    </thead>
+                    <tbody id="billList"></tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="text-align: right;">Total Water:</td>
+                            <td id="totalWater"></td>
+                            <td></td> <!-- Empty column for symmetry -->
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: right;">Total Milk:</td>
+                            <td id="totalMilk"></td>
+                            <td></td> <!-- Empty column for symmetry -->
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: right;">Total Water Cost (Rs.):</td>
+                            <td id="totalWaterCost"></td>
+                            <td></td> <!-- Empty column for symmetry -->
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: right;">Total Milk Cost (Rs.):</td>
+                            <td id="totalMilkCost"></td>
+                            <td></td> <!-- Empty column for symmetry -->
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: right;">
+                                <button class="btn btn-success" id="payWaterBtn">Pay Water Bill</button>
+                                <button class="btn btn-success" id="payMilkBtn">Pay Milk Bill</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+    </main>
+    <footer class="text-center" id="footer">
+        <p>&copy; 2024 Milk and Water Bill Management. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // JavaScript code for managing milk and water bill entries
+        document.addEventListener("DOMContentLoaded", function() {
+            const billForm = document.getElementById("billForm");
+            const billList = document.getElementById("billList");
+            const footer = document.getElementById("footer");
+            const totalWaterElement = document.getElementById("totalWater");
+            const totalMilkElement = document.getElementById("totalMilk");
+            const totalWaterCostElement = document.getElementById("totalWaterCost");
+            const totalMilkCostElement = document.getElementById("totalMilkCost");
+
+            let bills = [];
+
+            // Rate per liter for water and milk
+            const waterRate = 20;
+            const milkRate = 60;
+
+            function renderBillList() {
+                const tableBody = document.getElementById("billList");
+                tableBody.innerHTML = "";
+                bills.forEach((bill, index) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${bill.date}</td>
+                        <td>${bill.water || 'N/A'}</td>
+                        <td>${bill.milk || 'N/A'}</td>
+                        <td>${bill.status}</td>
+                        <td>
+                            <button class="btn btn-info btn-sm edit-btn" data-index="${index}">Edit</button>
+                            <button class="btn btn-danger btn-sm delete-btn" data-index="${index}">Delete</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                updateFooter();
+                attachEditDeleteEvents(); // Attach event listeners to edit and delete buttons
+            }
+
+            function saveBill() {
+                localStorage.setItem("bills", JSON.stringify(bills));
+                renderBillList();
+                billForm.reset();
+            }
+
+            function handleFormSubmit(event) {
+                event.preventDefault();
+                const date = document.getElementById("date").value;
+                const water = parseFloat(document.getElementById("water").value) || null;
+                const milk = parseFloat(document.getElementById("milk").value) || null;
+                const status = "Pending";
+                const bill = { date, water, milk, status };
+                bills.push(bill);
+                saveBill();
+            }
+
+            function updateFooter() {
+                const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
+                const totalMilk = bills.reduce((acc, curr) => acc + (curr.milk || 0), 0);
+                const costWater = totalWater * waterRate;
+                const costMilk = totalMilk * milkRate;
+                footer.innerHTML = `<p>&copy; 2024 Milk and Water Bill Management. Total Water: ${totalWater} Liters, Cost: Rs. ${costWater}. Total Milk: ${totalMilk} Liters, Cost: Rs. ${costMilk}. All rights reserved.</p>`;
+                totalWaterElement.textContent = totalWater;
+                totalMilkElement.textContent = totalMilk;
+                totalWaterCostElement.textContent = costWater;
+                totalMilkCostElement.textContent = costMilk;
+            }
+
+            function handlePayWater() {
+                const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
+                const costWater = totalWater * waterRate;
+                const confirmation = confirm(`Do you want to pay Rs. ${costWater} for the water bill?`);
+                if (confirmation) {
+                    const currentDate = new Date().toISOString().slice(0, 10);
+                    const data = `Date: ${currentDate}\nTotal Water: ${totalWater} Liters\nTotal Cost: Rs. ${costWater}`;
+                    saveToFile(data);
+                }
+            }
+
+            function handlePayMilk() {
+                const totalMilk = bills.reduce((acc, curr) => acc + (curr.milk || 0), 0);
+                const costMilk = totalMilk * milkRate;
+                const confirmation = confirm(`Do you want to pay Rs. ${costMilk} for the milk bill?`);
+                if (confirmation) {
+                    const currentDate = new Date().toISOString().slice(0, 10);
+                    const data = `Date: ${currentDate}\nTotal Milk: ${totalMilk} Liters\nTotal Cost: Rs. ${costMilk}`;
+                    saveToFile(data);
+                }
+            }
+
+            function saveToFile(data) {
+                const filename = 'bill_receipt.txt';
+                const blob = new Blob([data], { type: 'text/plain' });
+                if (window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, filename);
+                } else {
+                    const elem = window.document.createElement('a');
+                    elem.href = window.URL.createObjectURL(blob);
+                    elem.download = filename;
+                    document.body.appendChild(elem);
+                    elem.click();
+                    document.body.removeChild(elem);
+                }
+            }
+
+            function attachEditDeleteEvents() {
+                const editButtons = document.querySelectorAll('.edit-btn');
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+                editButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        editBill(index);
+                    });
+                });
+                deleteButtons.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        deleteBill(index);
+                    });
+                });
+            }
+
+            function editBill(index) {
+                // Implement edit functionality here
+                // For demonstration, let's just alert the index of the bill to be edited
+                alert(`Edit bill at index ${index}`);
+            }
+
+            function deleteBill(index) {
+                const confirmation = confirm("Are you sure you want to delete this bill entry?");
+                if (confirmation) {
+                    bills.splice(index, 1);
+                    saveBill();
+                }
+            }
+
+            billForm.addEventListener("submit", handleFormSubmit);
+            document.getElementById("payWaterBtn").addEventListener("click", handlePayWater);
+            document.getElementById("payMilkBtn").addEventListener("click", handlePayMilk);
+
+            if (localStorage.getItem("bills")) {
+                bills = JSON.parse(localStorage.getItem("bills"));
+                renderBillList();
+            }
+        });
+    </script>
+</body>
+</html>
