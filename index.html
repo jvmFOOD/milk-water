@@ -34,6 +34,7 @@
         <section>
             <h2>Add New Entry</h2>
             <form id="billForm">
+                <input type="hidden" id="billIndex"> <!-- Hidden field to store the index of the bill being edited -->
                 <div class="form-group">
                     <label for="date">Date:</label>
                     <input type="date" class="form-control" id="date" required>
@@ -147,8 +148,17 @@
                 const milk = parseFloat(document.getElementById("milk").value) || null;
                 const waterStatus = "Pending"; // Default status for water
                 const milkStatus = "Pending"; // Default status for milk
-                const bill = { date, water, milk, waterStatus, milkStatus }; // Include status in the bill object
-                bills.push(bill);
+                const billIndex = document.getElementById("billIndex").value;
+                if (billIndex !== "") {
+                    // Edit existing bill
+                    bills[billIndex].date = date;
+                    bills[billIndex].water = water;
+                    bills[billIndex].milk = milk;
+                } else {
+                    // Add new bill
+                    const bill = { date, water, milk, waterStatus, milkStatus }; // Include status in the bill object
+                    bills.push(bill);
+                }
                 saveBill();
             }
 
@@ -228,9 +238,11 @@
             }
 
             function editBill(index) {
-                // Implement edit functionality here
-                // For demonstration, let's just alert the index of the bill to be edited
-                alert(`Edit bill at index ${index}`);
+                const bill = bills[index];
+                document.getElementById("date").value = bill.date;
+                document.getElementById("water").value = bill.water || '';
+                document.getElementById("milk").value = bill.milk || '';
+                document.getElementById("billIndex").value = index; // Set the index of the bill being edited
             }
 
             function deleteBill(index) {
