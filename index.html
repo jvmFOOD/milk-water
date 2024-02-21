@@ -53,7 +53,7 @@
         <section>
             <h2>Bill Entries</h2>
             <div id="billTable" class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="billEntries">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -79,15 +79,36 @@
                             <td id="totalMilkCost"></td>
                         </tr>
                         <tr>
+                            <td colspan="2" style="text-align: right;">Pending Water:</td>
+                            <td id="pendingWater"></td>
+                            <td colspan="2" style="text-align: right;">Pending Milk:</td>
+                            <td id="pendingMilk"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: right;">Pending Water Cost (Rs.):</td>
+                            <td id="pendingWaterCost"></td>
+                            <td colspan="2" style="text-align: right;">Pending Milk Cost (Rs.):</td>
+                            <td id="pendingMilkCost"></td>
+                        </tr>
+                        <tr>
                             <td colspan="6" style="text-align: right;">
                                 <button class="btn btn-success" id="payWaterBtn">Pay Water Bill</button>
                                 <button class="btn btn-success" id="payMilkBtn">Pay Milk Bill</button>
+                                <button class="btn btn-primary" id="downloadPDF">Download PDF</button>
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="text-align: right;">
+                                <button class="btn btn-danger" id="clearAllBtn">Clear All Data</button>
                             </td>
                         </tr>
                     </tfoot>
+                    
                 </table>
             </div>
         </section>
+        
     </main>
     <footer class="text-center" id="footer">
         <p>&copy; 2024 Milk and Water Bill Management. All rights reserved.</p>
@@ -99,6 +120,7 @@
     
     <!-- Include jsPDF library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.js"></script>
 
     <script>
         // JavaScript code for managing milk and water bill entries
@@ -162,17 +184,40 @@
                 saveBill();
             }
 
-            function updateFooter() {
-                const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
-                const totalMilk = bills.reduce((acc, curr) => acc + (curr.milk || 0), 0);
-                const costWater = totalWater * waterRate;
-                const costMilk = totalMilk * milkRate;
-                footer.innerHTML = `<p>&copy; 2024 Milk and Water Bill Management. Total Water: ${totalWater} Liters, Cost: Rs. ${costWater}. Total Milk: ${totalMilk} Liters, Cost: Rs. ${costMilk}. All rights reserved.</p>`;
-                document.getElementById("totalWater").textContent = totalWater;
-                document.getElementById("totalMilk").textContent = totalMilk;
-                document.getElementById("totalWaterCost").textContent = costWater;
-                document.getElementById("totalMilkCost").textContent = costMilk;
-            }
+            document.getElementById("clearAllBtn").addEventListener("click", function() {
+    const confirmation = confirm("Are you sure you want to clear all data?");
+    if (confirmation) {
+        // Clear all data from the bills array and local storage
+        bills = [];
+        localStorage.removeItem("bills");
+        renderBillList(); // Re-render the bill list to reflect the changes
+    }
+});
+
+           function updateFooter() {
+    const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
+    const totalMilk = bills.reduce((acc, curr) => acc + (curr.milk || 0), 0);
+    const costWater = totalWater * waterRate;
+    const costMilk = totalMilk * milkRate;
+
+    const pendingWater = totalWater - (bills.filter(bill => bill.waterStatus === "Paid").reduce((acc, curr) => acc + (curr.water || 0), 0));
+    const pendingMilk = totalMilk - (bills.filter(bill => bill.milkStatus === "Paid").reduce((acc, curr) => acc + (curr.milk || 0), 0));
+
+    const pendingWaterCost = pendingWater * waterRate;
+    const pendingMilkCost = pendingMilk * milkRate;
+
+    footer.innerHTML = `<p>&copy; 2024 Milk and Water Bill Management. Total Water: ${totalWater} Liters, Pending Water: ${pendingWater} Liters, Cost: Rs. ${costWater}. Total Milk: ${totalMilk} Liters, Pending Milk: ${pendingMilk} Liters, Cost: Rs. ${costMilk}. All rights reserved.</p>`;
+    document.getElementById("totalWater").textContent = totalWater;
+    document.getElementById("totalMilk").textContent = totalMilk;
+    document.getElementById("totalWaterCost").textContent = costWater;
+    document.getElementById("totalMilkCost").textContent = costMilk;
+    document.getElementById("pendingWater").textContent = pendingWater;
+    document.getElementById("pendingMilk").textContent = pendingMilk;
+    document.getElementById("pendingWaterCost").textContent = pendingWaterCost;
+    document.getElementById("pendingMilkCost").textContent = pendingMilkCost;
+}
+
+
 
             function handlePayWater() {
                 const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
@@ -252,6 +297,32 @@
                     saveBill();
                 }
             }
+
+            // Download PDF
+           // Download Text File
+document.getElementById("downloadPDF").addEventListener("click", function() {
+    let textContent = "Bill Entries\n\n";
+    const table = document.getElementById("billEntries");
+    const rows = table.querySelectorAll("tr");
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        cells.forEach(cell => {
+            textContent += cell.textContent + "\t"; // Separate cell content by tab
+        });
+        textContent += "\n"; // Add new line after each row
+    });
+
+    // Create a Blob containing the text
+    const blob = new Blob([textContent], { type: "text/plain;charset=utf-8" });
+
+    // Create a link element to trigger the download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "bill_entries.txt";
+    link.click();
+});
+
 
             billForm.addEventListener("submit", handleFormSubmit);
             document.getElementById("payWaterBtn").addEventListener("click", handlePayWater);
