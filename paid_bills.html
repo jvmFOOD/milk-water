@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paid Bills Monthly</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Custom styles */
+        header {
+            background-color: #dc3545;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+        }
+        .paid-bills {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Paid Bills Monthly</h1>
+    </header>
+    <main class="container">
+        <section class="paid-bills">
+            <h2>Paid Bills for January 2024</h2>
+            <table id="januaryBillsTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Water (Liters)</th>
+                        <th>Water Price (Rs.)</th>
+                        <th>Milk (Liters)</th>
+                        <th>Milk Price (Rs.)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be dynamically populated here -->
+                </tbody>
+            </table>
+        </section>
+        <!-- Repeat the section for each month -->
+    </main>
+    <footer class="text-center">
+        <p>&copy; 2024 Milk and Water Bill Management. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Include your JavaScript logic -->
+    <script>
+        // JavaScript logic to filter and display paid bills for each month
+        document.addEventListener("DOMContentLoaded", function() {
+            const bills = JSON.parse(localStorage.getItem("bills")) || []; // Retrieve billing entries from local storage
+            const januaryBillsTable = $("#januaryBillsTable tbody");
+
+            // Function to calculate total price for each bill entry
+            function calculateTotalPrice(waterQuantity, milkQuantity, waterRate, milkRate) {
+                const waterPrice = waterQuantity * waterRate;
+                const milkPrice = milkQuantity * milkRate;
+                return { waterPrice, milkPrice };
+            }
+
+            // Function to dynamically populate paid bills for January
+            function populateJanuaryBills() {
+                bills.forEach(bill => {
+                    if (bill.waterStatus === "Paid" && bill.milkStatus === "Paid") {
+                        const totalPrice = calculateTotalPrice(bill.water, bill.milk, 20, 60);
+                        januaryBillsTable.append(`
+                            <tr>
+                                <td>${bill.date}</td>
+                                <td>${bill.water}</td>
+                                <td>${totalPrice.waterPrice}</td>
+                                <td>${bill.milk}</td>
+                                <td>${totalPrice.milkPrice}</td>
+                            </tr>
+                        `);
+                    }
+                });
+            }
+
+            populateJanuaryBills(); // Populate paid bills for January
+        });
+    </script>
+</body>
+</html>
