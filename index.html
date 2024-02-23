@@ -8,22 +8,114 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom CSS -->
     <style>
-        /* Custom styles */
-        header {
-            background-color: #dc3545;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        main {
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .btn {
-            margin-right: 10px;
-        }
+     /* Set a variable for the light blue background color */
+   /* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Light blue background */
+}
+
+/* Header styles */
+header {
+    background-color: #007bff; /* Dark blue header background */
+    padding: 20px 0;
+}
+
+h1 {
+    color: white; /* White text color for the header */
+    font-size: 36px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* Main container styles */
+.container {
+    margin-top: 20px;
+}
+
+/* Section styles */
+section {
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #007bff; /* Dark blue header for sections */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Form styles */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #f0f8ff; /* Light blue background for table headers */
+    text-align: center;
+}
+
+/* Button styles */
+.btn {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff; /* Dark blue button background */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.btn-success {
+    background-color: #28a745; /* Green button background */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Red button background */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Footer styles */
+footer {
+    background-color: #007bff; /* Dark blue footer background */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
     </style>
 </head>
 <body>
@@ -95,6 +187,10 @@
                                 <button class="btn btn-success" id="payWaterBtn">Pay Water Bill</button>
                                 <button class="btn btn-success" id="payMilkBtn">Pay Milk Bill</button>
                                 <button class="btn btn-primary" id="downloadPDF">Download PDF</button>
+                                <button class="btn btn-primary" id="downloadWaterPDF">Download Water Bill PDF</button>
+<button class="btn btn-primary" id="downloadMilkPDF">Download Milk Bill PDF</button>
+
+
                             </td>
                             
                         </tr>
@@ -136,26 +232,31 @@
             const milkRate = 60;
 
             function renderBillList() {
-                const tableBody = document.getElementById("billList");
-                tableBody.innerHTML = "";
-                bills.forEach((bill, index) => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${bill.date}</td>
-                        <td>${bill.water || 'N/A'}</td>
-                        <td>${bill.waterStatus}</td>
-                        <td>${bill.milk || 'N/A'}</td>
-                        <td>${bill.milkStatus}</td>
-                        <td>
-                            <button class="btn btn-info btn-sm edit-btn" data-index="${index}">Edit</button>
-                            <button class="btn btn-danger btn-sm delete-btn" data-index="${index}">Delete</button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-                updateFooter();
-                attachEditDeleteEvents(); // Attach event listeners to edit and delete buttons
-            }
+    const tableBody = document.getElementById("billList");
+    tableBody.innerHTML = "";
+    bills.forEach((bill, index) => {
+        const row = document.createElement("tr");
+        // Determine the color based on the status
+        const waterStatusColor = bill.waterStatus === 'Pending' ? 'text-danger' : 'text-success';
+        const milkStatusColor = bill.milkStatus === 'Pending' ? 'text-danger' : 'text-success';
+        row.innerHTML = `
+            <td>${bill.date}</td>
+            <td>${bill.water || 'N/A'}</td>
+            <td class="${waterStatusColor}">${bill.waterStatus}</td>
+            <td>${bill.milk || 'N/A'}</td>
+            <td class="${milkStatusColor}">${bill.milkStatus}</td>
+            <td>
+                <button class="btn btn-info btn-sm edit-btn" data-index="${index}">Edit</button>
+                <button class="btn btn-danger btn-sm delete-btn" data-index="${index}">Delete</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+    updateFooter();
+    attachEditDeleteEvents(); // Attach event listeners to edit and delete buttons
+}
+
+
 
             function saveBill() {
                 localStorage.setItem("bills", JSON.stringify(bills));
@@ -322,6 +423,52 @@ document.getElementById("downloadPDF").addEventListener("click", function() {
     link.download = "bill_entries.txt";
     link.click();
 });
+document.getElementById("downloadWaterPDF").addEventListener("click", function() {
+    downloadBill("water");
+});
+
+document.getElementById("downloadMilkPDF").addEventListener("click", function() {
+    downloadBill("milk");
+});
+
+function downloadBill(type) {
+    let textContent = "Bill Entries\n\n";
+    const table = document.getElementById("billEntries");
+    const rows = table.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        cells.forEach((cell, index) => {
+            // Check if the download is for water bill and hide milk data
+            if (type === 'water' && index === 3) {
+                return; // Skip adding milk data to text content
+            }
+            // Check if the download is for milk bill and hide water data
+            if (type === 'milk' && index === 1) {
+                return; // Skip adding water data to text content
+            }
+            // Skip the last cell which contains action buttons
+            if (index !== cells.length - 1) {
+                textContent += cell.textContent + "\t"; // Separate cell content by tab
+            }
+        });
+        textContent += "\n"; // Add new line after each row
+    });
+
+    // Append total amount to pay based on the type of bill
+    const totalCost = (type === 'water') ? document.getElementById("totalWaterCost").textContent : document.getElementById("totalMilkCost").textContent;
+    textContent += `\nTotal Amount to Pay\n${(type === 'water') ? 'Water' : 'Milk'} Cost: Rs. ${totalCost}`;
+
+    // Create a Blob containing the text
+    const blob = new Blob([textContent], { type: "text/plain;charset=utf-8" });
+
+    // Create a link element to trigger the download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `${type}_bill_entries.txt`;
+    link.click();
+}
+
 
 
             billForm.addEventListener("submit", handleFormSubmit);
