@@ -155,6 +155,7 @@ footer {
                             <th>Milk Status</th>
                             <th>Action</th>
                         </tr>
+                        
                     </thead>
                     <tbody id="billList"></tbody>
                     <tfoot>
@@ -236,7 +237,6 @@ footer {
     tableBody.innerHTML = "";
     bills.forEach((bill, index) => {
         const row = document.createElement("tr");
-        // Determine the color based on the status
         const waterStatusColor = bill.waterStatus === 'Pending' ? 'text-danger' : 'text-success';
         const milkStatusColor = bill.milkStatus === 'Pending' ? 'text-danger' : 'text-success';
         row.innerHTML = `
@@ -248,12 +248,44 @@ footer {
             <td>
                 <button class="btn btn-info btn-sm edit-btn" data-index="${index}">Edit</button>
                 <button class="btn btn-danger btn-sm delete-btn" data-index="${index}">Delete</button>
+                <button class="btn btn-${bill.waterStatus === 'Pending' ? 'success' : 'danger'} btn-sm water-status-btn" data-index="${index}">${bill.waterStatus === 'Pending' ? 'Mark Paid' : 'Mark Unpaid'}</button>
+                <button class="btn btn-${bill.milkStatus === 'Pending' ? 'success' : 'danger'} btn-sm milk-status-btn" data-index="${index}">${bill.milkStatus === 'Pending' ? 'Mark Paid' : 'Mark Unpaid'}</button>
             </td>
         `;
         tableBody.appendChild(row);
     });
     updateFooter();
-    attachEditDeleteEvents(); // Attach event listeners to edit and delete buttons
+    attachEditDeleteEvents();
+    attachStatusChangeEvents(); // Attach event listeners to status change buttons
+}
+
+function attachStatusChangeEvents() {
+    const waterStatusButtons = document.querySelectorAll('.water-status-btn');
+    const milkStatusButtons = document.querySelectorAll('.milk-status-btn');
+    waterStatusButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            toggleWaterStatus(index);
+        });
+    });
+    milkStatusButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            toggleMilkStatus(index);
+        });
+    });
+}
+
+function toggleWaterStatus(index) {
+    const bill = bills[index];
+    bill.waterStatus = bill.waterStatus === 'Pending' ? 'Paid' : 'Pending';
+    saveBill();
+}
+
+function toggleMilkStatus(index) {
+    const bill = bills[index];
+    bill.milkStatus = bill.milkStatus === 'Pending' ? 'Paid' : 'Pending';
+    saveBill();
 }
 
 
@@ -295,30 +327,29 @@ footer {
     }
 });
 
-           function updateFooter() {
-    const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
-    const totalMilk = bills.reduce((acc, curr) => acc + (curr.milk || 0), 0);
-    const costWater = totalWater * waterRate;
-    const costMilk = totalMilk * milkRate;
+          
+    function updateFooter() {
+        const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
+        const totalMilk = bills.reduce((acc, curr) => acc + (curr.milk || 0), 0);
+        const costWater = totalWater * waterRate;
+        const costMilk = totalMilk * milkRate;
 
-    const pendingWater = totalWater - (bills.filter(bill => bill.waterStatus === "Paid").reduce((acc, curr) => acc + (curr.water || 0), 0));
-    const pendingMilk = totalMilk - (bills.filter(bill => bill.milkStatus === "Paid").reduce((acc, curr) => acc + (curr.milk || 0), 0));
+        const pendingWater = totalWater - (bills.filter(bill => bill.waterStatus === "Paid").reduce((acc, curr) => acc + (curr.water || 0), 0));
+        const pendingMilk = totalMilk - (bills.filter(bill => bill.milkStatus === "Paid").reduce((acc, curr) => acc + (curr.milk || 0), 0));
 
-    const pendingWaterCost = pendingWater * waterRate;
-    const pendingMilkCost = pendingMilk * milkRate;
+        const pendingWaterCost = pendingWater * waterRate;
+        const pendingMilkCost = pendingMilk * milkRate;
 
-    footer.innerHTML = `<p>&copy; 2024 Milk and Water Bill Management. Total Water: ${totalWater} Liters, Pending Water: ${pendingWater} Liters, Cost: Rs. ${costWater}. Total Milk: ${totalMilk} Liters, Pending Milk: ${pendingMilk} Liters, Cost: Rs. ${costMilk}. All rights reserved.</p>`;
-    document.getElementById("totalWater").textContent = totalWater;
-    document.getElementById("totalMilk").textContent = totalMilk;
-    document.getElementById("totalWaterCost").textContent = costWater;
-    document.getElementById("totalMilkCost").textContent = costMilk;
-    document.getElementById("pendingWater").textContent = pendingWater;
-    document.getElementById("pendingMilk").textContent = pendingMilk;
-    document.getElementById("pendingWaterCost").textContent = pendingWaterCost;
-    document.getElementById("pendingMilkCost").textContent = pendingMilkCost;
-}
-
-
+        footer.innerHTML = `<p>&copy; 2024 Milk and Water Bill Management. Total Water: ${totalWater} Liters, Pending Water: ${pendingWater} Liters, Cost: Rs. ${costWater}. Total Milk: ${totalMilk} Liters, Pending Milk: ${pendingMilk} Liters, Cost: Rs. ${costMilk}. All rights reserved.</p>`;
+        document.getElementById("totalWater").textContent = totalWater;
+        document.getElementById("totalMilk").textContent = totalMilk;
+        document.getElementById("totalWaterCost").textContent = costWater;
+        document.getElementById("totalMilkCost").textContent = costMilk;
+        document.getElementById("pendingWater").textContent = pendingWater;
+        document.getElementById("pendingMilk").textContent = pendingMilk;
+        document.getElementById("pendingWaterCost").textContent = pendingWaterCost;
+        document.getElementById("pendingMilkCost").textContent = pendingMilkCost;
+    }
 
             function handlePayWater() {
                 const totalWater = bills.reduce((acc, curr) => acc + (curr.water || 0), 0);
