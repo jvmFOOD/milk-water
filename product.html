@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JVP Foods Product Catalog - Premium Snacks and Wafers</title>
+    <meta name="description" content="Explore JVP Foods' wide range of delicious snacks, wafers, and healthy khakhras. High-quality ingredients, authentic flavors, and traditional recipes.">
+    <meta name="keywords" content="JVP Foods, snacks, wafers, khakhra, potato chips, Gujarati snacks, healthy snacks">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "JVP Foods",
+      "url": "https://www.jvpfoods.com",
+      "logo": "https://www.jvpfoods.com/logo.png",
+      "description": "JVP Foods offers a wide range of premium snacks, wafers, and healthy khakhras made with high-quality ingredients and authentic flavors.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-1234567890",
+        "contactType": "customer service"
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61565458272611&mibextid=ZbWKwL",
+        "https://www.instagram.com/jvp_foods?igsh=cnJzY21jaHZtZWox",
+        "https://g.page/r/CZr-hpe5iBF7EAE/review"
+      ]
+    }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #45a049;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .navbar-nav .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffd700;
+        }
+        .dropdown-menu {
+            background-color: #45a049;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .dropdown-item {
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+        .dropdown-item:hover {
+            background-color: #3d8b40;
+            color: #ffd700;
+        }
+        .search-bar, .category-filter {
+            max-width: 100%;
+            margin-bottom: 25px;
+        }
+        .product-card {
+            background-color: #fef9e7;
+            border: none;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .product-image {
+            max-height: 250px;
+            width: 100%;
+            margin: 0 auto 20px;
+            display: block;
+            transition: transform 0.3s ease;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #f57c00;
+        }
+        .product-price {
+            font-size: 22px;
+            font-weight: 600;
+            color: #e91e63;
+        }
+        .buy-button {
+            background-color: #4caf50;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .buy-button:hover {
+            background-color: #45a049;
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        .modal-content {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .modal-header {
+            background-color:#45a049;
+            color: #ffffff;
+            border-bottom: none;
+        }
+        .modal-body {
+            padding: 30px;
+            background: cornsilk;
+        }
+        .modal-body img {
+            width: 100%;
+            height: 561px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            object-fit: cover;
+        }
+        #cartItems td {
+            vertical-align: middle;
+            padding: 10px;
+            text-align: left;
+        }
+        #cartItems th {
+            padding: 10px;
+            text-align: left;
+            background-color: #f0f0f0;
+        }
+        #cartTotal {
+            font-weight: 600;
+            font-size: 24px;
+            color: #e91e63;
+            text-align: right;
+            padding: 10px;
+        }
+        .quantity-input {
+            width: 70px;
+            text-align: center;
+            border: 2px solid #f57c00;
+            border-radius: 25px;
+            padding: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .quantity-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px #f57c00;
+        }
+        .product-description {
+            font-size: 16px;
+            color: #000000;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        .product-features {
+            margin-top: 20px;
+            padding-left: 25px;
+        }
+        .product-features li {
+            margin-bottom: 8px;
+            font-size: 16px;
+            position: relative;
+        }
+        .product-features li::before {
+            content: '•';
+            color:#f57c00;
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+        }
+        .modal-buy-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        .modal-price {
+            font-size: 24px;
+            font-weight: 600;
+            color: #e91e63;
+        }
+        .old-price {
+            font-size: 18px;
+            color: #999;
+            text-decoration: line-through;
+            margin-right: 10px;
+        }
+        #cartButton {
+            background-color: #ff9800;
+            border: none;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #cartButton:hover {
+            background-color: #f57c00;
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        #cartCount {
+            background-color: #ffffff;
+            color: #ff9800;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        @media (min-width: 980px) {
+            .product-image {
+                height: 250px;
+                object-fit: contain;
+            }
+        }
+        #cartItems {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #cartItems th, #cartItems td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        #cartItems th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        #cartItems tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        #cartItems tr:hover {
+            background-color: #f5f5f5;
+        }
+        .social-share {
+            margin-top: 15px;
+        }
+        .social-share a {
+            margin-right: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+        .out-of-stock {
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .out-of-stock-button {
+            background-color: #ccc;
+            color: #e91e63;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .out-of-stock-button:hover {
+            background-color: #ccc;
+            color: #666;
+        }
+        .out-of-stock-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+            font-weight: bold;
+            color: #e91e63;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .out-of-stock:hover .out-of-stock-popup {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">JVP Foods Product Catalog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#" onclick="filterByCategory('Snacks')">Snacks</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterByCategory('Wafers')">Wafers</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterByCategory('Khakhras')">Khakhras</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="filterByCategory('Potato Chips')">Potato Chips</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <button class="btn btn-outline-light" id="cartButton">
+                    <i class="fas fa-shopping-cart"></i> Cart <span id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search products...">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-filter">
+                    <select id="categoryFilter" class="form-select">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="price-filter">
+                    <select id="priceFilter" class="form-select">
+                        <option value="">All Prices</option>
+                        <option value="0-50">₹0 - ₹50</option>
+                        <option value="51-100">₹51 - ₹100</option>
+                        <option value="101-150">₹101 - ₹150</option>
+                        <option value="151+">₹151+</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <button id="bestSellersFilter" class="btn btn-outline-primary w-100 filter-button">
+                    <img src="assets/img/about.jpg" alt="Best Sellers" class="filter-icon">
+                    <span class="filter-text">Best Sellers</span>
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button id="onSaleFilter" class="btn btn-outline-danger w-100 filter-button">
+                    <img src="assets/img/JVM M1.jpeg" alt="On Sale" class="filter-icon">
+                    <span class="filter-text">10 % Off</span>
+                </button>
+            </div>
+        </div>
+        <style>
+            .filter-button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+                transition: all 0.3s ease;
+            }
+            .filter-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .filter-icon {
+                width: 24px;
+                height: 24px;
+                margin-right: 10px;
+                object-fit: cover;
+            }
+            .filter-text {
+                font-weight: bold;
+            }
+        </style>
+        <div class="row row-cols-1 row-cols-md-3 g-4" id="productContainer">
+            <!-- Product cards will be dynamically inserted here -->
+        </div>
+    </div>
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Product details will be dynamically inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="buy-button" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="buy-button" id="modalBuyNowButton">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cartItems"></div>
+                    <div id="cartTotal"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="buy-button" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="buy-button" id="checkoutButton">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const products = [
+            {
+                name: "Salted Potata Wafer",
+                category: "Wafer",
+                id: "21001001",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm), Edible Common Salt (Rock Salt)",
+                nutritionalValue: "Energy: 528 kCal, Protien: 6g, Carbohydratres: 58g, Fat: 30g",
+                description: "JVP Foods' Salted Potato Chips are crafted from the finest, hand-picked potatoes, ensuring every bite is light, crispy, and full of flavor. Expertly seasoned with just the right amount of salt, these chips deliver a simple yet satisfying crunch that's perfect for every occasion. Whether you're enjoying them as a snack on the go or sharing with friends and family, our potato chips are made with clean label ingredients and no artificial additives, preserving the natural taste of quality potatoes.",
+                keyFeatures: "Made from high-quality, hand-selected potatoes. Light, crispy texture with a classic salted flavor. No artificial preservatives or additives. Perfect for snacking, parties, or travel.",
+                price: "₹85.00",
+                oldPrice: "₹95.00",
+                image: "assets/img/products/Salted Potata Wafer.webp",
+                inStock: true
+            },
+            {
+                name: "Potato Wafer (Hot N Spicy)",
+                category: "Wafer",
+                id: "21001002",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm), Edible Common Salt (Rock Salt), Red Chilli Powder, Dry Mango Powder, Coriander Powder, Cumin Powder, Black Pepper Powder, Ginger Powder, Clove Powder, Black Salt.",
+                nutritionalValue: "Energy: 539 kCal, Protein: 7.4g, Carbohyrate: 56.9g, Total Fat: 29.5g",
+                description: "For those who love an extra kick in their snacks, JVP Foods' Spicy Potato Chips deliver a burst of bold, fiery flavor in every crispy bite. Made from premium, hand-picked potatoes and seasoned with a unique blend of spices, these chips offer the perfect balance of heat and crunch. Whether you're enjoying them on your own or sharing with others, our spicy potato chips provide an exciting snacking experience that is both flavorful and satisfying.",
+                keyFeatures: "Hand-selected, high-quality potatoes for the perfect crunch. Bold and spicy flavor with a unique blend of spices. Ideal for those who crave a flavorful and spicy snack. Great for snacking at home, parties, or while on the move",
+                price: "₹85.00",
+                image: "assets/img/products/Potato Wafer (Hot N Spicy).webp",
+                inStock: true
+            },
+            {
+                name: "Potato Wafer (Salt & Pepper)",
+                category: "Wafer",
+                id: "21001003",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm), Edible Common Salt (Rock Salt), Black Pepper Powder, Ginger Powder, Black Salt.",
+                nutritionalValue: "Energy: 538.2 kCal, Protein: 7.2g, Carbohyrate: 57g, Total Fat: 29.6g",
+                description: "JVP Foods' Salt & Pepper Potato Chips offer a sophisticated twist on the classic chip with a delicate balance of seasoning. Made from carefully selected potatoes, these chips are lightly seasoned with a blend of salt and freshly ground pepper to deliver a rich, savory flavor that elevates your snacking experience. Perfect for those who enjoy a subtle, yet flavorful crunch, these chips are ideal for any occasion, from casual snacking to entertaining guests.",
+                keyFeatures: "Made from premium, hand-picked potatoes. Seasoned with a perfect blend of salt and black pepper. Crisp and light texture with a savory flavor profile. Great for snacking at home, parties, or on the go.",
+                price: "₹85.00",
+                image: "https://drive.google.com/uc?export=view&id=1XSMp-67dBLodShkXQq0yX2ZusCSAyYU7",
+                inStock: false   
+            },
+            {
+                name: "Potato Wafer",
+                category: "Farali",
+                id: "21001004",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm)",
+                nutritionalValue: "Energy: 527.69kCal, Protein: 6.08g, Carbohyrate: 58.26g, Total Fat: 30.9g",
+                description: "Introducing JVP Foods' special No Salt, No Flavor Potato Chips—a perfect snack for fasting and vrat-friendly diets. Made from high-quality, naturally sourced potatoes, these chips are carefully prepared without any added salt or artificial flavors, keeping them light and healthy for your special dietary needs. With a crisp and authentic texture, they are the ideal snack for health-conscious individuals and those observing fasts. Crafted using traditional methods and with a focus on clean ingredients, our chips offer the pure taste of nature. A perfect companion for Navratri, these fasting-friendly chips are free from preservatives and made with rock salt for those who prefer.",
+                keyFeatures: "Ideal for Vrat & Fasting: Specific for Navratri or any fasting period. Light and Crisp Texture: Carefully fried to retain natural potato texture.",
+                price: "₹85.00",
+                image: "https://drive.google.com/uc?export=view&id=1xnxdaoONbGa69AABiRBvHt0cqy6kSIww",
+                inStock: true
+            },
+            {
+                name: "Potato Wafer (Peri-Peri)",
+                category: "Wafer",
+                id: "21001005",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm), Mixed Spice (Peri Peri Chilli Pepper, Black Pepper, Common Salt, Cumin Powder, Mustard Seeds, Onion Powder, Dried Oregano, Other Spice & Condiments)",
+                nutritionalValue: "Energy: 565kCal, Protein: 8.9g, Carbohyrate: 57.8g, Total Fat: 23.3g",
+                description: "JVP Foods' Peri Peri Potato Wafers bring a fiery, flavorful kick to your snacking. Crafted from the finest potatoes and seasoned with our signature in-house Peri Peri masala, these wafers offer an irresistible blend of spice and crunch. Each chip is packed with bold, tangy flavors and a hint of heat, making it the perfect choice for those who crave a zesty, exciting snack. Made with the best ingredients, our Peri Peri wafers ensure a high-quality, flavorful experience in every bite.",
+                keyFeatures: "Premium potatoes with a crisp, light texture. In-house developed Peri Peri masala for a unique spicy flavor. Free from artificial preservatives and additives. Perfect for spice lovers and adventurous snackers.",
+                price: "₹95.00",
+                image: "https://drive.google.com/uc?export=view&id=1qopR35fqvAoMrCQ09fwn6tZbF_IdvCjL",
+                inStock: true
+            },
+            {
+                name: "Potato Wafer (Cheese Chilli)",
+                category: "Wafer",
+                id: "21001006",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm), Mixed Spice (Cheese Powder, Black Pepper, Red Chilly Powder, Common Salt, Cumin Powder, Other Spice & Condiments.",
+                nutritionalValue: "Energy: 523kCal, Protein: 7.4g, Carbohyrate: 57g, Total Fat: 29.5g",
+                description: "JVP Foods' Cheese Chilli Potato Wafers offer the perfect fusion of rich, cheesy goodness and a spicy kick. Made from premium potatoes and seasoned with our in-house developed Cheese Chilli masala, these wafers deliver a delightful combination of flavors that's both savory and bold. Whether you're a cheese lover or a spice enthusiast, these wafers provide a satisfying crunch with a unique taste. Using the best ingredients, we ensure that every bite is packed with flavor and excitement.",
+                keyFeatures: "Made from high-quality, hand-picked potatoes. Unique blend of cheese and chilli flavors developed in-house. Crisp texture with a perfect balance of spicy and cheesy notes. Ideal for those who love adventurous and flavorful snacks.",
+                price: "₹95.00",
+                image: "https://drive.google.com/uc?export=view&id=1ldxaGBIs6QXM_c132_cUpXCTn_UefYi2",
+                inStock: true
+            },
+            {
+                name: "Round Banana Wafer (Salt & Pepper)",
+                category: "Wafer",
+                id: "21001007",
+                weight: "200",
+                ingredients: "Bananas, Vegetable Oil (Palm), Edible Common Salt (Rock Salt), Black Pepper Powder, Ginger Powder, Black Salt.",
+                nutritionalValue: "Energy: 539kCal, Protein: 4.08g, Carbohyrate: 52.8g, Total Fat: 35.8g",
+                description: "Salt & Pepper Banana Chips are made from farm-fresh, handpicked bananas, sliced to perfection, and seasoned with a zesty blend of salt and freshly ground pepper. These crispy, less oiled snacks are crafted with care, using natural ingredients and no preservatives. Perfect for any time snacking, they offer a crunchy and flavorful twist on a classic favorite.",
+                keyFeatures: "Made from 100% farm-fresh bananas. Seasoned with natural salt and pepper. No artificial flavors or preservatives. Rich in fiber and gluten-free. Perfect for on-the-go snacking or with meals.",
+                price: "₹80.00",
+                image: "https://drive.google.com/uc?export=view&id=1t0d7bv741wVEAp6Zk2kBSUu3CDiu2MzP",
+                inStock: true
+            },
+            {
+                name: "Round Banana Wafer (Hot N Spicy)",
+                category: "Wafer",
+                id: "21001008",
+                weight: "200",
+                ingredients: "Bananas, Vegetable Oil (Palm), Edible Common Salt (Rock Salt), Red Chilli Powder, Dry Mango Powder, Coriander Powder, Cumin Powder, Black Pepper Powder, Ginger Powder, Clove Powder, Black Salt.",
+                nutritionalValue: "Energy: 539kCal, Protein: 4.08g, Carbohyrate: 52.8g, Total Fat: 35.8g",
+                description: "Turn up the heat with our Hot & Spicy Banana Chips, made from premium farm-fresh bananas. Each crisp slice is packed with a bold blend of spices for an intense, fiery kick. Perfect for spice lovers, these chips are a tasty, all-natural snack with no preservatives—just pure, crunchy satisfaction.",
+                keyFeatures: "Made from 100% farm-fresh bananas. Spiced with a fiery blend of natural ingredients. No artificial flavors or preservatives. Gluten-free and rich in fiber. Ideal for those who crave bold, spicy snacks.",
+                price: "₹80.00",
+                image: "https://drive.google.com/uc?export=view&id=1EinBmKm6eaR_iER5_HGSFZDGMkaJ6MRE",
+                inStock: true
+            },
+            {
+                name: "Long Banana Wafer (Salt & Pepper)",
+                category: "Wafer",
+                id: "21001009",
+                weight: "200",
+                ingredients: "Bananas, Vegetable Oil (Palm), Edible Common Salt (Rock Salt), Black Pepper Powder, Ginger Powder, Black Salt.",
+                nutritionalValue: "Energy: 539kCal, Protein: 4.08g, Carbohyrate: 52.8g, Total Fat: 35.8g",
+                description: "Our Salt & Pepper Banana Chips are made from farm-fresh, handpicked bananas, sliced to perfection, and seasoned with a zesty blend of salt and freshly ground pepper. These crispy, less oiled snacks are crafted with care, using natural ingredients and no preservatives. Perfect for any time snacking, they offer a crunchy and flavorful twist on a classic favorite.",
+                keyFeatures: "Made from 100% farm-fresh bananas. Seasoned with natural salt and pepper. No artificial flavors or preservatives. Rich in fiber and gluten-free. Perfect for on-the-go snacking or with meals.",
+                price: "₹80.00",
+                image: "https://drive.google.com/uc?export=view&id=1nMQA_kHnnrG31bat6yCcRoTdKlX7jrdc",
+                inStock: true
+            },
+            {
+                name: "Long Banana Wafer (Hot N Spicy)",
+                category: "Wafer",
+                id: "21001010",
+                weight: "200",
+                ingredients: "Bananas, Vegetable Oil (Palm), Edible Common Salt (Rock Salt), Chilli Powder, Dry Mango Powder, Coriander Powder, Cumin Powder, Black Pepper Powder, Ginger Powder, Clove Powder, Black Salt.",
+                nutritionalValue: "Energy: 539kCal, Protein: 4.08g, Carbohyrate: 52.8g, Total Fat: 35.8g",
+                description: "Turn up the heat with our Hot & Spicy Banana Chips, made from premium farm-fresh bananas. Each crisp slice is packed with a bold blend of spices for an intense, fiery kick. Perfect for spice lovers, these chips are a tasty, all-natural snack with no preservatives—just pure, crunchy satisfaction.",
+                keyFeatures: "Made from 100% farm-fresh bananas. Spiced with a fiery blend of natural ingredients. No artificial flavors or preservatives. Gluten-free and rich in fiber. Ideal for those who crave bold, spicy snacks.",
+                price: "₹80.00",
+                image: "https://drive.google.com/uc?export=view&id=16udb2YzEiKwPexFSWtNFQR7gOL0Y6l40",
+                inStock: true
+            },
+            {
+                name: "Long Banana Wafer",
+                category: "Wafer",
+                id: "21001011",
+                weight: "200",
+                ingredients: "Bananas, Vegetable Oil (Palm)",
+                nutritionalValue: "Energy: 524.24kCal, Protein: 5.78g, Carbohyrate: 56.26g, Total Fat: 28.9g",
+                description: "Introducing JVP Foods' special No Salt, No Flavor Banana—a perfect snack for fasting and vrat-friendly diets. Made from high-quality, farm freah bananas, these chips are carefully prepared without any added salt or artificial flavors, keeping them light and healthy for your special dietary needs. With a crisp and authentic texture, they are the ideal snack for health-conscious individuals and those observing fasts. Crafted using traditional methods and with a focus on clean ingredients, our chips offer the pure taste of nature. A perfect companion for Navratri, these fasting-friendly chips are free from preservatives and made with rock salt for those who prefer.",
+                keyFeatures: "Ideal for Vrat & Fasting: Specific for Navratri or any fasting period. Light and Crisp Texture: Carefully fried to retain natural banana texture.",
+                price: "₹80.00",
+                    image: "https://drive.google.com/uc?export=view&id=14uIdFgQ26P6bgfQBSzhJwuGCZTwOhS9s",
+                inStock: true
+            },
+            {
+                name: "Yeloow Banana Wafer",
+                category: "Wafer",
+                id: "21001012",
+                weight: "200",
+                ingredients: "Banana, Vegetable Oil (Palm), Edible Common Salt",
+                nutritionalValue: "Energy: 518kCal, Protein: 2.4g, Carbohyrate: 59g, Total Fat: 34g",
+                description: "Our Yellow Banana Wafers are made from carefully selected, farm-fresh bananas, thinly sliced and perfectly fried to golden crispness. Lightly seasoned to enhance their natural flavor, these wafers are a crunchy and delightful snack option. Made with natural ingredients and no preservatives, they offer a wholesome, guilt-free snacking experience.",
+                keyFeatures: "Made from 100% farm-fresh bananas. Lightly seasoned for a natural, crisp taste. No artificial flavors or preservatives. Gluten-free and rich in dietary fiber. Great for anytime snacking or as a side with meals.",
+                price: "₹110.00",
+                image: "https://drive.google.com/uc?export=view&id=1ZSnPCYt-xHIM-8wScHP_OGx_cj56WPqF",
+                inStock: true
+            },
+            {
+                name: "Farali Chevdo (Sweet)",
+                category: "Farali",
+                id: "21002001",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm) , Rock Salt, Roasted Peanuts, Sugar Powder, Fried Curry Leaves.",
+                nutritionalValue: "Energy: 569kCal, Protein: 13.3g, Carbohyrate: 43.6g, Total Fat: 38g",
+                description: "Crafted for auspicious fasting days, our Farali Chevdo Sweet is a delicious and light snack made with premium, fasting-approved ingredients. Sweet and satisfying. Enjoy this special treat during fasts, a time-honored tradition in India. Made with natural ingredients, it's not only tasty but also gentle on the stomach, making it an ideal choice during fasting.",
+                keyFeatures: "Made with fasting-friendly ingredients. Sweet flavor, perfect for traditional Indian fasting days. No artificial colors or preservatives. Light, healthy, and easy to digest. Crafted for auspicious days like Navratri, Ekadashi, and other fasting occasions.",
+                price: "₹85.00",
+                image: "https://drive.google.com/uc?export=view&id=1alE761xwES5_wK_yzJ07VWz-3B1vsMlI",
+                inStock: true
+            },
+            {
+                name: "Farali Chevdo (Spicy)",
+                category: "Farali",
+                id: "21002002",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm) , Rock Salt, Roasted Peanuts, Sugar Powder, Red Chilli Powder, Raisins, Curry Leaves.",
+                nutritionalValue: "Energy: 569kCal, Protein: 13.3g, Carbohyrate: 43.6g, Total Fat: 38g",
+                description: "Crafted for auspicious fasting days, our Farali Chevdo Spicy is a delicious and light snack made with premium, fasting-approved ingredients. Sweet and satisfying. Enjoy this special treat during fasts, a time-honored tradition in India. Made with natural ingredients, it's not only tasty but also gentle on the stomach, making it an ideal choice during fasting.",
+                keyFeatures: "Made with fasting-friendly ingredients. Sweet flavor, perfect for traditional Indian fasting days. No artificial colors or preservatives. Light, healthy, and easy to digest. Crafted for auspicious days like Navratri, Ekadashi, and other fasting occasions.",
+                price: "₹85.00",
+                image: "https://drive.google.com/uc?export=view&id=1wQaMS3b_y8GMU1YbLBNrzkIMvChojFSq",
+                inStock: true
+            },
+            {
+                name: "Rajwadi Farali Chevdo (Sweet)",
+                category: "Farali",
+                id: "21002003",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm) , Rock Salt, Cashewnut, Fig, Almond, Seasame Seeds, Roasted Peanuts, Fennel Seeds, Poppy Seeds, Sugar Powder, Green Chilli, Raisins, Curry Leaves.",
+                nutritionalValue: "Energy: 569kCal, Protein: 13.3g, Carbohyrate: 43.6g, Total Fat: 38g",
+                description: "Elevate your fasting experience with our Farali Chevdo Sweet, enriched with premium ingredients like cashews, almonds, and figs. This white-colored delicacy combines the sweetness of figs and the crunch of nuts to create a delicious, nutrient-rich snack that's perfect for fasting. Made with fasting-approved, natural ingredients, this wholesome snack not only satisfies your taste buds but also nourishes your body, making it the perfect choice during auspicious fasting days in India.",
+                keyFeatures: "Includes cashews, almonds, and figs for added taste and nutrition. Made with fasting-friendly, natural ingredients. Sweet and crunchy, perfect for fasting during Navratri, Ekadashi, and other holy days. No artificial colors, preservatives, or additives. Light, healthy, and easy to digest.",
+                price: "₹180.00",
+                image: "https://drive.google.com/uc?export=view&id=1vEYfeGR5RpOr_dftHmIrUhEUR6zrnMlK",
+                inStock: true
+            },
+            {
+                name: "Rajwadi Farali Chevdo (Spicy)",
+                category: "Farali",
+                id: "21002004",
+                weight: "200",
+                ingredients: "Potatoes, Vegetable Oil (Palm) , Rock Salt, Cashewnut, Fig, Almond, Seasame Seeds, Roasted Peanuts, Fennel Seeds, Poppy Seeds Sugar Powder, Green Chiili, Raisins, Red Chilli Powder, Curry Leaves.",
+                nutritionalValue: "Energy: 569kCal, Protein: 13.3g, Carbohyrate: 43.6g, Total Fat: 38g",
+                description: "Spice up your fasting days with our Farali Chevdo Spicy, enriched with a bold blend of fasting-friendly spices and premium ingredients like cashews, almonds, and figs. This white-colored snack offers a perfect mix of crunch and heat, making it an exciting choice for those who enjoy a little spice while fasting. Packed with natural, wholesome ingredients, it's designed to nourish and satisfy during auspicious fasting days in India.",
+                keyFeatures: "Infused with natural spices and enriched with cashews, almonds, and figs. Fasting-approved ingredients, perfect for holy days like Navratri and Ekadashi. Spicy and crunchy for a flavorful fasting experience. No artificial flavors, colors, or preservatives. Light, healthy, and easy to digest.",
+                price: "₹180.00",
+                image: "https://drive.google.com/uc?export=view&id=1Eai8aUOkHsrQXXKaIsJsAeISmQ9lvaDy",
+                inStock: true
+            },
+            {
+                name: "Papad Chavanu",
+                category: "Mixture",
+                id: "21003001",
+                weight: "200",
+                ingredients: "Puffed Rice, Gram Flour, Black Lentil Flour (Papad), Vegetable Oil (Plam), Common Salt, Sugar, Red Chilli Powder, Turmeric, Asafoetida, Soda Bicarb and Other Selceted Spices & Condiments.",
+                nutritionalValue: "Energy: 563kCal, Protein: 9.13g, Carbohyrate: 48.65g, Total Fat: 36.91g",
+                description: "Experience the authentic taste of Gujarat with our Papad Chavanu, a traditional snack from Khambhat. Made from crispy fried papads, puffed rice (murmura), and besan sev, all tossed in a tangy and spicy masala blend, this savory treat is perfect for festive occasions or daily snacking. With its balanced mix of sweet, spicy, and tangy flavors, Papad Chavanu is ideal for enjoying with tea or as a festive snack. Crafted using natural ingredients and following the traditional recipe, this delicious namkeen is a must-try for those who crave the true taste of Gujarat.",
+                keyFeatures: "Made with crispy papads, murmura, and besan sev. Flavored with a tangy, spicy masala blend. Sweet, spicy, and tangy—perfectly balanced for a flavorful snack. Long shelf life when stored in airtight containers. Great for festive occasions, fasting, or everyday tea-time snacking.",
+                price: "₹90.00",
+                    image: "https://drive.google.com/uc?export=view&id=1SKIeRK-yRXHoNa9aepE4W2SIUiqrGCJt",
+                inStock: true
+            },
+            {
+                name: "Rajwadi Poha Chevdo",
+                category: "Mixture",
+                id: "21003002",
+                weight: "200",
+                ingredients: "Flattened Rice, Gram Flour, Vegetable Oil (Palm), Cahswenut, Peanut, Raisin, Red Chilly Powder, Turmeric, Corainder Seeds, Seasme Seeds, Fennel Seeds, Mustard Seeds, Clove, Cardamom, Cinnamom, Asafoetida and Other Selected Spices.",
+                nutritionalValue: "Energy: 553.16kCal, Protein: 9.35g, Carbohyrate: 55.95g, Total Fat: 32.44g",
+                description: "Savor the authentic taste of Gujarat with our Rajwadi Poha Chivda. Made from roasted poha, crunchy cashews, peanuts, and roasted gram, this light, crispy snack is enhanced with dried coconut flakes, raisins, and traditional spices. Perfect for festive occasions or everyday snacking, it offers a balanced sweet, spicy, and tangy flavor in every bite.",
+                keyFeatures: "Made with roasted poha, cashews, peanuts, and roasted gram. Enhanced with dried coconut flakes, raisins, and aromatic curry leaves. Balanced flavor profile: sweet, spicy, and tangy. Clean-label ingredients, free from artificial preservatives. Perfect for festive occasions or everyday snacking.",
+                price: "₹130.00",
+                image: "https://drive.google.com/uc?export=view&id=1LX3J0JDtQXtW6YF8_n80YUXVINXvSJZx",
+                inStock: true
+            },
+            {
+                name: "Nadiadi Bhusu Mix",
+                category: "Mixture",
+                id: "21003003",
+                weight: "200",
+                ingredients: "Gram Flour, Vegetable Oil (Palm), Flattened Rice, Potato, Lentil, Peanut, Sesame Seeds , Common Salt, Sugar, Coriander Seeds, Cinnamon Powder, Mustard Seeds, Cumin Seeds, Clove, Carom Seed, Red Chilli Powder, Turmeric, Asafoetida and Other Selected Spices & Condiments.",
+                nutritionalValue: "Energy: 570.82kCal, Protein: 13.70g, Carbohyrate: 42.02g, Total Fat: 38.66g",
+                description: "Experience the authentic taste of Nadiad with our Nadiadi Bhusu Mix. This traditional Gujarati snack is a delightful blend of crispy, savory ingredients that create a unique texture and flavor profile. Made with a mix of gram flour, flattened rice, potatoes, lentils, and peanuts, seasoned with a carefully balanced blend of spices, this snack offers a satisfying crunch with every bite. Perfect for tea time or as a quick snack, Nadiadi Bhusu Mix brings the flavors of Gujarat right to your home.",
+                keyFeatures: "Traditional Gujarati snack from Nadiad. Blend of gram flour, flattened rice, potatoes, lentils, and peanuts. Seasoned with a unique mix of spices for authentic flavor. Crispy texture with a satisfying crunch. Ideal for tea time or as a quick, flavorful snack.",
+                price: "₹90.00",
+                image: "https://drive.google.com/uc?export=view&id=1SKIeRK-yRXHoNa9aepE4W2SIUiqrGCJt",
+                inStock: true
+            },
+            {
+                name: "Chorafali Khakhra",
+                category: "Healthy Khakhra",
+                id: "21004017",
+                weight: "500",
+                ingredients: "Black Eyed Beans (Chora, Lobhiya) Flour, Gram Flour, Black Lentil Flour, Vegetable Oil (Palm), Common Salt, Red Chilli Powder, Black Salt, Asafoetida",
+                nutritionalValue: "Energy: 466kCal, Protein:17.4g, Carbohyrate: 55.66g, Total Fat: 19.38g",
+                description: "Relish the crispy goodness of Chorafali Khakhra, made with gram flour, black lentil flour, and black-eyed beans flour. This traditional Gujarati snack for a burst of flavor, making it perfect for festive occasions or everyday snacking.",
+                keyFeatures: "Made with gram flour, black lentil flour, and black-eyed beans (chora). Seasoned for a flavorful kick. Baked for a crunchy, healthy snack option. Naturally low in gluten, perfect for those with gluten sensitivities. No artificial preservatives or flavors.",
+                price: "₹275.00",
+                image: "https://drive.google.com/uc?export=view&id=1ebMzZj0zcQFEf38gizk0nM4-bAoTr6Uv",
+                inStock: true
+            }
+        ];
+
+        const productContainer = document.getElementById('productContainer');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const searchInput = document.getElementById('searchInput');
+        const priceFilter = document.getElementById('priceFilter');
+        const productModal = new bootstrap.Modal(document.getElementById('productModal'));
+        const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+        let cart = [];
+
+        function createProductCard(product) {
+            const isOutOfStock = !product.inStock;
+            const buttonHtml = isOutOfStock 
+                ? '<button class="btn btn-secondary" disabled>Out of Stock</button>'
+                : `<button class="btn btn-primary buy-button" onclick="addToCartFromCard('${product.id}', this)">Add to Cart</button>`;
+            
+            return `
+                <div class="col">
+                    <div class="card product-card ${isOutOfStock ? 'out-of-stock' : ''}">
+                        <img src="${product.image}" class="card-img-top product-image" alt="${product.name}" loading="lazy">
+                        <div class="card-body product-details">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text"><strong>Category:</strong> ${product.category}</p>
+                            <p class="card-text">
+                                ${product.oldPrice ? `<span class="old-price">${product.oldPrice}</span>` : ''}
+                                <span class="product-price">${product.price}</span>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <input type="number" class="form-control quantity-input" value="1" min="1" max="10">
+                                ${buttonHtml}
+                            </div>
+                            <button class="buy-button mt-2 w-100" onclick="showProductDetails('${product.id}')">View Details</button>
+                            <div class="social-share">
+                                <a href="#" onclick="shareProduct('${product.name}', 'facebook')"><i class="fab fa-facebook"></i></a>
+                                <a href="#" onclick="shareProduct('${product.name}', 'instagram')"><i class="fab fa-instagram"></i></a>
+                                <a href="#" onclick="shareProduct('${product.name}', 'twitter')"><i class="fab fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            const modalTitle = document.getElementById('productModalLabel');
+            const modalBody = document.querySelector('#productModal .modal-body');
+            const modalAddToCartButton = document.getElementById('modalAddToCartButton');
+            const modalBuyNowButton = document.getElementById('modalBuyNowButton');
+
+            modalTitle.textContent = product.name;
+            modalBody.innerHTML = `
+                <img src="${product.image}" class="img-fluid mb-3" alt="${product.name}">
+                <p><strong>Category:</strong> ${product.category}</p>
+                <p><strong>ID:</strong> ${product.id}</p>
+                <p><strong>Weight:</strong> ${product.weight}g</p>
+                <p><strong>Ingredients:</strong> ${product.ingredients}</p>
+                <p><strong>Nutritional Value:</strong> ${product.nutritionalValue}</p>
+                <p><strong>Description:</strong> ${product.description}</p>
+                <p><strong>Key Features:</strong> ${product.keyFeatures}</p>
+                <p><strong>Price:</strong> ${product.oldPrice ? `<span class="old-price">${product.oldPrice}</span>` : ''} <span class="product-price">${product.price}</span></p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <input type="number" class="form-control quantity-input" value="1" min="1" max="10">
+                    <button class="buy-button" onclick="addToCartFromModal('${product.id}')" ${!product.inStock ? 'disabled' : ''}>
+                        ${product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                    </button>
+                </div>
+                <div class="social-share mt-3">
+                    <a href="#" onclick="shareProduct('${product.name}', 'facebook')"><i class="fab fa-facebook"></i></a>
+                    <a href="#" onclick="shareProduct('${product.name}', 'instagram')"><i class="fab fa-instagram"></i></a>
+                    <a href="#" onclick="shareProduct('${product.name}', 'twitter')"><i class="fab fa-twitter"></i></a>
+                </div>
+            `;
+
+            modalBuyNowButton.onclick = () => buyNow(product);
+            modalBuyNowButton.disabled = !product.inStock;
+            modalBuyNowButton.textContent = product.inStock ? 'Buy Now' : 'Out of Stock';
+
+            productModal.show();
+        }
+
+        function shareProduct(productName, platform) {
+            const shareUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent(`Check out ${productName} from JVP Foods!`);
+            let shareLink;
+
+            switch(platform) {
+                case 'facebook':
+                    shareLink = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
+                    break;
+                case 'instagram':
+                    shareLink = `https://www.instagram.com/jvp_foods?igsh=cnJzY21jaHZtZWox`;
+                    break;
+                case 'twitter':
+                    shareLink = `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
+                    break;
+            }
+
+            window.open(shareLink, '_blank');
+        }
+
+        function addToCartFromCard(productId, button) {
+            const product = products.find(p => p.id === productId);
+            if (!product.inStock) return;
+            const quantityInput = button.previousElementSibling;
+            const quantity = parseInt(quantityInput.value);
+            addToCart(product, quantity);
+        }
+
+        function addToCartFromModal(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product.inStock) return;
+            const quantityInput = document.querySelector('#productModal .quantity-input');
+            const quantity = parseInt(quantityInput.value);
+            addToCart(product, quantity);
+            productModal.hide();
+        }
+
+        function addToCart(product, quantity) {
+            if (!product.inStock) return;
+            const existingItem = cart.find(item => item.id === product.id);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ ...product, quantity });
+            }
+            updateCart();
+            updateCartCount();
+        }
+
+        function buyNow(product) {
+            if (!product.inStock) return;
+            addToCart(product, 1);
+            cartModal.show();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            let total = 0;
+
+            cartItems.innerHTML = cart.map(item => {
+                const itemTotal = parseFloat(item.price.replace('₹', '')) * item.quantity;
+                total += itemTotal;
+                return `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover;">
+                            ${item.name}
+                        </div>
+                        <div>
+                            <input type="number" class="form-control quantity-input" value="${item.quantity}" min="1" max="10" onchange="updateQuantity('${item.id}', this.value)">
+                        </div>
+                        <div>₹${itemTotal.toFixed(2)}</div>
+                        <button class="btn btn-danger btn-sm" onclick="removeFromCart('${item.id}')">Remove</button>
+                    </div>
+                `;
+            }).join('');
+
+            cartTotal.textContent = `Total: ₹${total.toFixed(2)}`;
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = parseInt(newQuantity);
+                updateCart();
+                updateCartCount();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cartCount = document.getElementById('cartCount');
+            cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+        }
+
+        // Initialize the page
+        function init() {
+            const selectedCategory = categoryFilter.value;
+            const filteredProducts = products.filter(product => selectedCategory === '' || product.category === selectedCategory);
+
+            productContainer.innerHTML = '';
+            filteredProducts.forEach(product => {
+                productContainer.innerHTML += createProductCard(product);
+            });
+
+            const categories = [...new Set(products.map(p => p.category))];
+            categories.forEach(category => {
+                categoryFilter.innerHTML += `<option value="${category}">${category}</option>`;
+            });
+
+            searchInput.addEventListener('input', filterProducts);
+            categoryFilter.addEventListener('change', filterProducts);
+            priceFilter.addEventListener('change', filterProducts);
+
+            document.getElementById('cartButton').addEventListener('click', () => cartModal.show());
+            document.getElementById('checkoutButton').addEventListener('click', checkout);
+            
+            updateTotalItemsCount(filteredProducts.length);
+        }
+
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedCategory = categoryFilter.value;
+            const selectedPriceRange = priceFilter.value;
+
+            const filteredProducts = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+                const matchesCategory = selectedCategory === '' || product.category === selectedCategory;
+                const matchesPrice = matchesPriceRange(product.price, selectedPriceRange);
+                return matchesSearch && matchesCategory && matchesPrice;
+            });
+
+            productContainer.innerHTML = '';
+            filteredProducts.forEach(product => {
+                productContainer.innerHTML += createProductCard(product);
+            });
+
+            updateTotalItemsCount(filteredProducts.length);
+        }
+
+        function updateTotalItemsCount(count) {
+            const totalItemsCount = document.getElementById('totalItemsCount');
+            if (totalItemsCount) {
+                totalItemsCount.textContent = `Total Items: ${count}`;
+            } else {
+                const countElement = document.createElement('p');
+                countElement.id = 'totalItemsCount';
+                countElement.textContent = `Total Items: ${count}`;
+                productContainer.parentNode.insertBefore(countElement, productContainer);
+            }
+        }
+
+        function matchesPriceRange(price, range) {
+            if (range === '') return true;
+            const productPrice = parseFloat(price.replace('₹', ''));
+            const [min, max] = range.split('-').map(Number);
+            return productPrice >= min && (max ? productPrice <= max : true);
+        }
+
+        function checkout() {
+            const cartDetails = cart.map(item => {
+                const itemTotal = (parseFloat(item.price.replace('₹', '')) * item.quantity).toFixed(2);
+                return `${item.name} - Quantity: ${item.quantity} - Price: ₹${itemTotal}`;
+            }).join('\n');
+
+            const totalAmount = cart.reduce((total, item) => 
+                total + (parseFloat(item.price.replace('₹', '')) * item.quantity), 0).toFixed(2);
+
+            const message = `New Order:\n\n${cartDetails}\n\nTotal Amount: ₹${totalAmount}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=918347223122&text=${encodeURIComponent(message)}`;
+
+            if (confirm('Are you sure you want to place this order?')) {
+                cart = [];
+                updateCart();
+                updateCartCount();
+                cartModal.hide();
+                window.open(whatsappUrl, '_blank');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    
+</body>
+</html>
